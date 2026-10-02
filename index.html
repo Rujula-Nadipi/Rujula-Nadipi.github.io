@@ -1,0 +1,884 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Rujula Nadipi, data engineer. Python, SQL, Prefect, DuckDB, PostgreSQL, Azure, Databricks. Portfolio, projects and experience.">
+<meta property="og:title" content="Rujula Nadipi · Data Engineer">
+<meta property="og:description" content="I build data pipelines you can rerun with confidence.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%231F5FA8'/><text x='16' y='22' font-family='Arial' font-weight='700' font-size='15' fill='white' text-anchor='middle'>RN</text></svg>">
+<style>html{color-scheme:light dark}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Rujula Nadipi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a data engineer's catalog. Wide editorial hero with a live-looking run log,
+   then an interactive pipeline case study, project "tables", and a typed career timeline. */
+:root{
+  --bg:#F2F4F6;
+  --surface:#FFFFFF;
+  --ink:#14202E;
+  --muted:#556275;
+  --line:#D5DCE4;
+  --accent:#1F5FA8;
+  --accent-soft:#E2ECF7;
+  --amber:#B86E00;
+  --ok:#1E7A4C;
+  --ok-soft:#E1F2E8;
+  --font-display:"Schibsted Grotesk","Helvetica Neue",Arial,sans-serif;
+  --font-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --radius:10px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0D141D; --surface:#141E2A; --ink:#E4EAF1; --muted:#9AA8B8; --line:#26354A;
+    --accent:#6FA8E8; --accent-soft:#1A2B40; --amber:#F0B44C; --ok:#5CC793; --ok-soft:#143024;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0D141D; --surface:#141E2A; --ink:#E4EAF1; --muted:#9AA8B8; --line:#26354A;
+  --accent:#6FA8E8; --accent-soft:#1A2B40; --amber:#F0B44C; --ok:#5CC793; --ok-soft:#143024;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.6;}
+.wrap{max-width:1100px;margin:0 auto;padding-inline:clamp(16px,4vw,40px);}
+a{color:var(--accent);text-underline-offset:3px}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+h1,h2,h3{font-family:var(--font-display);text-wrap:balance;margin:0;line-height:1.15}
+p{margin:0}
+.mono{font-family:var(--font-mono)}
+.eyebrow{font-family:var(--font-mono);font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+
+/* nav */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:14px;flex-wrap:wrap}
+.brand{font-family:var(--font-display);font-weight:800;font-size:18px;color:var(--ink);text-decoration:none}
+.nav ul{list-style:none;margin:0;padding:0;display:flex;gap:20px;flex-wrap:wrap}
+.nav ul a{color:var(--muted);text-decoration:none;font-size:14.5px;font-weight:500}
+.nav ul a:hover{color:var(--ink)}
+
+/* hero */
+.hero{padding-block:clamp(48px,8vw,96px) clamp(40px,6vw,72px)}
+.hero-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:clamp(28px,5vw,64px);align-items:center}
+.hero-grid>*{min-width:0}
+.status{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;background:var(--ok-soft);color:var(--ok);font-size:13.5px;font-weight:600}
+.status::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--ok)}
+.hero h1{font-size:clamp(38px,6vw,64px);font-weight:800;letter-spacing:-.02em;margin-top:22px}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero .lede{font-size:clamp(17px,2vw,19px);color:var(--muted);margin-top:20px;max-width:56ch}
+.cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:8px;font-weight:600;font-size:15px;text-decoration:none;border:1px solid var(--line);color:var(--ink);background:var(--surface);cursor:pointer;font-family:var(--font-body)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.btn:hover{border-color:var(--accent)}
+
+/* run log */
+.runlog{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;font-family:var(--font-mono);font-size:13px;box-shadow:0 18px 40px -24px rgba(20,32,46,.35)}
+.runlog-head{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.runlog-head b{font-weight:500}
+.pill{font-size:11.5px;padding:3px 9px;border-radius:999px;background:var(--ok-soft);color:var(--ok);font-weight:500}
+.runlog ol{list-style:none;margin:0;padding:8px 0}
+.runlog li{display:grid;grid-template-columns:18px 1fr auto;gap:10px;padding:8px 16px;align-items:center}
+.runlog li .tick{color:var(--ok)}
+.runlog li .task{overflow-wrap:anywhere}
+.runlog li .state{color:var(--muted);font-size:12px}
+.runlog-foot{padding:10px 16px;border-top:1px solid var(--line);color:var(--muted);font-size:12px}
+@media (prefers-reduced-motion:no-preference){
+  .runlog li{animation:rise .5s ease both}
+  .runlog li:nth-child(2){animation-delay:.12s}.runlog li:nth-child(3){animation-delay:.24s}
+  .runlog li:nth-child(4){animation-delay:.36s}.runlog li:nth-child(5){animation-delay:.48s}
+  @keyframes rise{from{transform:translateY(6px)}to{transform:none}}
+}
+
+/* sections */
+section.block{padding-block:clamp(56px,8vw,88px);border-top:1px solid var(--line)}
+.sec-head{display:grid;gap:10px;margin-bottom:36px;max-width:68ch}
+.sec-head h2{font-size:clamp(28px,4vw,40px);font-weight:800;letter-spacing:-.015em}
+.sec-head p{color:var(--muted);font-size:17px}
+
+/* value strip */
+.values{display:grid;grid-template-columns:repeat(4,1fr);gap:28px}
+.values>div{min-width:0;display:grid;gap:8px;align-content:start}
+.values h3{font-size:18px;font-weight:700}
+.values p{color:var(--muted);font-size:15px}
+.values .k{font-family:var(--font-mono);font-size:12px;color:var(--amber);letter-spacing:.05em;text-transform:uppercase}
+
+/* pipeline case study */
+.case{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:clamp(20px,3.5vw,36px)}
+.case-meta{display:flex;flex-wrap:wrap;gap:8px 18px;color:var(--muted);font-size:14px;margin-bottom:26px}
+.case-meta span b{color:var(--ink);font-weight:600}
+.flow{display:flex;align-items:stretch;gap:0;overflow-x:auto;padding-bottom:6px}
+.stage{flex:1 1 0;min-width:130px;display:grid;gap:6px;align-content:start;text-align:left;padding:14px;border:1px solid var(--line);border-radius:8px;background:var(--bg);cursor:pointer;font-family:var(--font-body);color:var(--ink)}
+.stage .n{font-family:var(--font-mono);font-size:11.5px;color:var(--muted)}
+.stage .t{font-weight:600;font-size:15px;line-height:1.3}
+.stage .s{font-family:var(--font-mono);font-size:11.5px;color:var(--muted);overflow-wrap:anywhere}
+.stage[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.stage[aria-pressed="true"] .n{color:var(--accent)}
+.arrow{flex:0 0 28px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-family:var(--font-mono)}
+.detail{margin-top:20px;display:grid;grid-template-columns:1fr 1fr;gap:28px;padding-top:22px;border-top:1px dashed var(--line)}
+.detail>div{min-width:0}
+.detail h3{font-size:20px;font-weight:700;margin-bottom:8px}
+.detail .why{font-size:15px;color:var(--muted)}
+.detail .why b{color:var(--ink)}
+.detail pre{margin:0;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:14px;font-family:var(--font-mono);font-size:12.5px;line-height:1.55;overflow-x:auto;white-space:pre}
+.decisions{display:grid;grid-template-columns:repeat(2,1fr);gap:16px 32px;margin-top:30px}
+.decisions>div{min-width:0;padding-left:14px;border-left:2px solid var(--line)}
+.decisions h4{margin:0 0 4px;font-size:15.5px;font-family:var(--font-body);font-weight:600}
+.decisions p{font-size:14.5px;color:var(--muted)}
+.note{margin-top:22px;font-size:13.5px;color:var(--muted)}
+
+/* projects */
+.projects{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.proj{min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px;display:grid;gap:12px;align-content:start}
+.proj-top{display:flex;justify-content:space-between;gap:12px;align-items:baseline;flex-wrap:wrap}
+.proj h3{font-size:19px;font-weight:700}
+.proj .yr{font-family:var(--font-mono);font-size:12.5px;color:var(--muted)}
+.proj p{color:var(--muted);font-size:15px}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-family:var(--font-mono);font-size:11.5px;padding:3px 8px;border-radius:5px;background:var(--bg);border:1px solid var(--line);color:var(--ink)}
+.proj .link{font-size:14px;font-weight:600}
+.proj.building{border-style:dashed}
+.badge{font-family:var(--font-mono);font-size:11px;color:var(--amber);letter-spacing:.06em;text-transform:uppercase}
+
+/* timeline */
+.timeline{list-style:none;margin:0;padding:0;display:grid}
+.timeline>li{display:grid;grid-template-columns:150px 1fr;gap:28px;padding-block:22px;border-bottom:1px solid var(--line)}
+.timeline>li:first-child{padding-top:0}
+.timeline>li>*{min-width:0}
+.when{font-family:var(--font-mono);font-size:13px;color:var(--muted);padding-top:3px;font-variant-numeric:tabular-nums}
+.timeline h3{font-size:19px;font-weight:700}
+.timeline .org{color:var(--accent);font-weight:600;font-size:15px;margin-top:2px}
+.timeline ul{margin:10px 0 0;padding-left:18px;color:var(--muted);font-size:15px;display:grid;gap:6px;max-width:75ch}
+.timeline ul li{padding:0;border:0}
+
+/* skills */
+.skills{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.skills>div{min-width:0;display:grid;gap:10px;align-content:start}
+.skills h3{font-size:13px;font-family:var(--font-mono);font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.edu{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:44px}
+.edu>div{min-width:0;padding-top:14px;border-top:2px solid var(--ink)}
+.edu b{display:block;font-family:var(--font-display);font-size:17px}
+.edu span{color:var(--muted);font-size:14.5px}
+
+/* contact */
+.contact{display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:center}
+.contact>*{min-width:0}
+.contact h2{font-size:clamp(30px,4.5vw,46px);font-weight:800;letter-spacing:-.02em}
+.contact p{color:var(--muted);font-size:17px;margin-top:14px;max-width:48ch}
+.cbox{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px;display:grid;gap:14px}
+.crow{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.crow .lbl{font-family:var(--font-mono);font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.crow .val{font-weight:600;overflow-wrap:anywhere;user-select:all}
+.copy{font-size:13px;padding:6px 12px}
+footer{padding-block:28px;border-top:1px solid var(--line);color:var(--muted);font-size:13.5px}
+
+/* ---------- data stories ---------- */
+:root{--before:#97A3B2;--study:#C9D2DC;--grid:#E6EAEF}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--before:#55667D;--study:#33445A;--grid:#1E2A39}}
+:root[data-theme="dark"]{--before:#55667D;--study:#33445A;--grid:#1E2A39}
+.plain{display:inline-block;margin-top:4px;font-size:14.5px;color:var(--muted)}
+.plain b{color:var(--ink);font-weight:600}
+
+/* stat tiles */
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:44px}
+.tile{min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px;display:grid;gap:6px;align-content:start}
+.tile .v{font-family:var(--font-body);font-weight:600;font-size:clamp(30px,4vw,40px);line-height:1.1;letter-spacing:-.01em}
+.tile .v small{font-size:.55em;color:var(--muted);font-weight:500}
+.tile .l{font-size:15px;color:var(--ink)}
+.tile .src{font-family:var(--font-mono);font-size:11.5px;color:var(--muted)}
+
+/* chart frame */
+.chart{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:clamp(18px,3vw,30px)}
+.chart-head{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:flex-end;margin-bottom:18px}
+.chart-head h3{font-size:20px;font-weight:700}
+.chart-head p{color:var(--muted);font-size:14.5px;margin-top:4px;max-width:60ch}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:13.5px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.legend i{display:inline-block;width:14px;height:10px;border-radius:2px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.chip{font-family:var(--font-body);font-size:13.5px;font-weight:500;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+
+/* before / after bars */
+.ba{list-style:none;margin:0;padding:0;display:grid}
+.ba li{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:8px 24px;align-items:center;padding:12px 0;border-top:1px solid var(--grid)}
+.ba li:first-child{border-top:0}
+.ba .what{font-weight:600;font-size:15px;line-height:1.35}
+.ba .co{display:block;font-family:var(--font-mono);font-size:11.5px;color:var(--muted);font-weight:400;margin-top:2px}
+.ba .bars{display:grid;gap:3px;cursor:default;border-radius:4px}
+.ba .row{display:flex;align-items:center;gap:10px;min-width:0}
+.ba .bar{height:12px;border-radius:0 4px 4px 0;flex:none;transition:width .6s ease}
+.ba .bar.b{background:var(--before)}
+.ba .bar.a{background:var(--accent)}
+.ba .val{font-size:13px;color:var(--muted);white-space:nowrap}
+.ba .val b{color:var(--ink)}
+details.tbl{margin-top:18px;font-size:14px}
+details.tbl summary{cursor:pointer;color:var(--accent);font-weight:600}
+.tbl-wrap{overflow-x:auto;margin-top:10px}
+.tbl-wrap table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:520px}
+.tbl-wrap th,.tbl-wrap td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl-wrap th{font-family:var(--font-mono);font-weight:500;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.tbl-wrap td.n{font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* journey */
+.track{position:relative;margin:30px 0 6px}
+.lane{display:grid;grid-template-columns:96px 1fr;gap:12px;align-items:center;margin-bottom:10px}
+.lane>span{font-family:var(--font-mono);font-size:12px;color:var(--muted)}
+.lane .rail{position:relative;height:30px}
+.gl{position:absolute;top:0;bottom:0;border-left:1px solid var(--grid)}
+.seg{position:absolute;top:3px;height:24px;min-width:10px;border-radius:4px;border:0;padding:0;cursor:pointer;background:var(--accent);color:var(--bg);font-family:var(--font-mono);font-size:11.5px;font-weight:500;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 2px var(--surface)}
+.seg.study{background:var(--study);color:var(--ink);cursor:default}
+.seg.now{background:repeating-linear-gradient(135deg,var(--accent) 0 6px,color-mix(in srgb,var(--accent) 70%,var(--surface)) 6px 9px)}
+.seg[aria-pressed="true"]{box-shadow:0 0 0 2px var(--surface),0 0 0 4px var(--ink)}
+.axis{display:grid;grid-template-columns:96px 1fr;gap:12px}
+.axis .ticks{position:relative;height:18px;font-family:var(--font-mono);font-size:11.5px;color:var(--muted)}
+.axis .ticks span{position:absolute;transform:translateX(-50%)}
+.marker{position:absolute;top:-6px;bottom:-4px;border-left:1px dashed var(--muted);pointer-events:none}
+.marker b{position:absolute;top:-18px;left:4px;font-family:var(--font-mono);font-size:11px;font-weight:500;color:var(--muted);white-space:nowrap}
+.chapters{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:26px}
+.chap{min-width:0;text-align:left;font-family:var(--font-body);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:var(--radius);padding:16px;display:grid;gap:6px;align-content:start;cursor:pointer}
+.chap[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.chap .num{font-family:var(--font-mono);font-size:11.5px;color:var(--muted)}
+.chap h4{margin:0;font-family:var(--font-display);font-size:16.5px;line-height:1.25}
+.chap p{font-size:14px;line-height:1.5;color:var(--muted)}
+.chap .win{font-size:13.5px;font-weight:600;color:var(--ok)}
+
+/* pipeline explainer */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+.step{text-align:left;font-family:var(--font-body);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:12px;cursor:pointer;display:grid;gap:2px;min-width:0}
+.step .n{font-family:var(--font-mono);font-size:11.5px;color:var(--muted)}
+.step .t{font-weight:600;font-size:15px}
+.step[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.explain{display:grid;grid-template-columns:1fr 1.35fr;gap:28px;align-items:start}
+.explain>div{min-width:0}
+.explain h4{margin:0 0 8px;font-family:var(--font-display);font-size:20px}
+.explain .kitchen{margin-top:12px;padding:12px 14px;border-left:3px solid var(--amber);background:var(--bg);border-radius:0 8px 8px 0;font-size:14.5px;color:var(--muted)}
+.explain .kitchen b{color:var(--ink)}
+.demo{overflow-x:auto}
+.demo table{border-collapse:separate;border-spacing:0;width:100%;min-width:380px;font-size:13.5px}
+.demo th,.demo td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--line);transition:background .4s,color .4s,opacity .4s}
+.demo th{font-family:var(--font-mono);font-weight:500;font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.demo td.bad{background:color-mix(in srgb,var(--amber) 16%,transparent);color:var(--ink)}
+.demo td.fixed{background:var(--ok-soft);color:var(--ink)}
+.demo tr.gone td{opacity:.4;text-decoration:line-through}
+.demo .flag{font-size:11px;font-family:var(--font-mono);color:var(--amber);margin-left:6px;text-decoration:none;display:inline-block}
+.checks{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:6px;font-size:14px}
+.checks li::before{content:"✓ ";color:var(--ok);font-weight:700}
+.mini{display:grid;gap:12px}
+.mini .r{display:grid;grid-template-columns:110px 1fr;gap:12px;align-items:center;font-size:14px}
+.mini .bar{height:22px;border-radius:0 4px 4px 0;background:var(--accent);display:flex;align-items:center;justify-content:flex-end;padding-right:8px;color:var(--bg);font-weight:600;font-size:13px;transition:width .6s ease}
+.play{margin-top:16px}
+
+/* skills map */
+.smap-wrap{overflow-x:auto}
+.smap{border-collapse:collapse;width:100%;min-width:640px;font-size:14px}
+.smap th,.smap td{padding:9px 8px;border-bottom:1px solid var(--grid);text-align:center}
+.smap thead th{font-family:var(--font-mono);font-weight:500;font-size:11.5px;color:var(--muted);vertical-align:bottom}
+.smap tbody th{text-align:left;font-weight:600;font-family:var(--font-body)}
+.smap tbody th small{display:block;font-weight:400;color:var(--muted);font-size:12.5px}
+.dot{display:inline-block;width:12px;height:12px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 2px var(--surface)}
+.smap td.empty::after{content:"";display:inline-block;width:4px;height:4px;border-radius:50%;background:var(--line)}
+.smap td.cnt{text-align:left;white-space:nowrap}
+.cntbar{display:inline-block;height:8px;border-radius:0 4px 4px 0;background:var(--accent);opacity:.55;vertical-align:middle;margin-right:8px}
+
+/* tooltip */
+.tip{position:fixed;z-index:20;max-width:280px;pointer-events:none;background:var(--ink);color:var(--bg);font-size:13px;line-height:1.45;padding:9px 11px;border-radius:8px;box-shadow:0 10px 24px -12px rgba(0,0,0,.5)}
+.tip b{font-weight:600}
+
+@media (max-width:860px){
+  .hero-grid,.contact,.detail,.explain{grid-template-columns:1fr}
+  .tiles,.chapters{grid-template-columns:1fr 1fr}
+  .steps{grid-template-columns:1fr 1fr}
+  .values{grid-template-columns:repeat(2,1fr)}
+  .skills,.edu{grid-template-columns:1fr 1fr}
+}
+@media (max-width:620px){
+  .projects,.decisions,.values,.skills,.edu{grid-template-columns:1fr}
+  .timeline>li{grid-template-columns:1fr;gap:6px}
+  .tiles,.chapters{grid-template-columns:1fr}
+  .ba li{grid-template-columns:1fr}
+  .lane,.axis{grid-template-columns:56px 1fr;gap:8px}
+  .lane>span{font-size:11px}
+  .seg{font-size:10px}
+  .flow{flex-direction:column;overflow:visible}
+  .stage{min-width:0}
+  .arrow{flex:0 0 22px;transform:rotate(90deg)}
+  .nav ul{gap:14px}
+}
+</style>
+</head>
+<body>
+
+
+<nav class="nav" aria-label="Main">
+  <div class="wrap">
+    <a class="brand" href="#top">Rujula Nadipi</a>
+    <ul>
+      <li><a href="#impact">Impact</a></li>
+      <li><a href="#journey">Journey</a></li>
+      <li><a href="#work">Featured work</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="status">Open to data engineering roles · US · open to relocation</span>
+      <h1>I build data pipelines you can <em>rerun with confidence.</em></h1>
+      <p class="lede">Data engineer working in Python, SQL, Prefect, DuckDB, PostgreSQL and Azure. I turn raw, messy sources into clean, tested, analysis-ready tables, and I build them with the person reading the dashboard in mind.</p>
+      <div class="cta">
+        <a class="btn primary" href="#work">See my pipeline work</a>
+        <a class="btn" href="https://github.com/Rujula-Nadipi" target="_blank" rel="noopener">GitHub</a>
+        <a class="btn" href="https://www.linkedin.com/in/rujula-reddy-nadipi/" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="btn" href="#contact">Get in touch</a>
+      </div>
+    </div>
+
+    <figure class="runlog" aria-label="Task structure of the Overture POI pipeline">
+      <div class="runlog-head">
+        <b>overture_poi_naics_flow</b>
+        <span class="pill">Completed</span>
+      </div>
+      <ol>
+        <li><span class="tick">✓</span><span class="task">load_naics_mapping</span><span class="state">task</span></li>
+        <li><span class="tick">✓</span><span class="task">download_overture_poi_data</span><span class="state">task</span></li>
+        <li><span class="tick">✓</span><span class="task">process_poi_data</span><span class="state">task</span></li>
+        <li><span class="tick">✓</span><span class="task">store_in_ducklake · MERGE</span><span class="state">task</span></li>
+        <li><span class="tick">✓</span><span class="task">pytest · unit + integration</span><span class="state">tests</span></li>
+      </ol>
+      <figcaption class="runlog-foot">Prefect flow I built at DMVTek · runs in Docker/Podman</figcaption>
+    </figure>
+  </div>
+</header>
+
+<section class="block" aria-labelledby="bring">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">What I bring</span>
+      <h2 id="bring">Engineering skills with a business translator built in</h2>
+    </div>
+    <div class="values">
+      <div><span class="k">Pipelines</span><h3>Data engineering</h3><p>Prefect ETL flows, DuckDB and PostgreSQL, idempotent loads, Dockerized stacks and pytest.</p></div>
+      <div><span class="k">Insight</span><h3>Analytics</h3><p>Power BI dashboards, KPI reporting and requirements gathered straight from stakeholders.</p></div>
+      <div><span class="k">Models</span><h3>Machine learning</h3><p>An end-to-end ML pipeline: feature engineering, class balancing, model comparison and tuning.</p></div>
+      <div><span class="k">Domains</span><h3>Real-world data</h3><p>Insurance (TCS), healthcare (Virufy) and geospatial business data (DMVTek).</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="impact" aria-labelledby="impact-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Impact at a glance</span>
+      <h2 id="impact-h">What changed because I was on the team</h2>
+      <p>You don't need a data background to read this. Each number shows something that got faster, cheaper or more reliable after my work.</p>
+    </div>
+
+    <div class="tiles">
+      <div class="tile"><span class="v">99.9%</span><span class="l">of the time, data was ready when teams needed it</span><span class="src">AI Consultants Inc.</span></div>
+      <div class="tile"><span class="v">Weekly <small>→</small> same day</span><span class="l">how fast leaders got their project reports</span><span class="src">Global Alliant Inc.</span></div>
+      <div class="tile"><span class="v">85%</span><span class="l">accuracy of my COVID-19 detection model, 12 points above where it started</span><span class="src">Virufy</span></div>
+      <div class="tile"><span class="v">0</span><span class="l">privacy violations across 30+ personal-data tickets I handled</span><span class="src">AI Consultants Inc.</span></div>
+      <div class="tile"><span class="v">100+</span><span class="l">data tables explained in plain language so others could use them</span><span class="src">AI Consultants Inc.</span></div>
+      <div class="tile"><span class="v">98%+</span><span class="l">of client reports delivered on time</span><span class="src">Tata Consultancy Services</span></div>
+    </div>
+
+    <div class="chart">
+      <div class="chart-head">
+        <div>
+          <h3>Less time, cost and errors</h3>
+          <p>Gray is how things were before (set to 100). Blue is after my work. A shorter blue bar is better. Hover or tap a row for the story behind it.</p>
+        </div>
+        <div class="legend" aria-hidden="true"><span><i style="background:var(--before)"></i>Before</span><span><i style="background:var(--accent)"></i>After</span></div>
+      </div>
+      <div class="filters" role="group" aria-label="Filter by job" id="ba-filters">
+        <button class="chip" type="button" data-f="all" aria-pressed="true">All jobs</button>
+        <button class="chip" type="button" data-f="DMVTek" aria-pressed="false">DMVTek</button>
+        <button class="chip" type="button" data-f="Global Alliant" aria-pressed="false">Global Alliant</button>
+        <button class="chip" type="button" data-f="AI Consultants" aria-pressed="false">AI Consultants</button>
+        <button class="chip" type="button" data-f="TCS" aria-pressed="false">TCS</button>
+      </div>
+      <ul class="ba" id="ba"></ul>
+      <details class="tbl">
+        <summary>See these numbers as a table</summary>
+        <div class="tbl-wrap"><table><thead><tr><th>What improved</th><th>Where</th><th>Change</th><th>In plain words</th></tr></thead><tbody id="ba-table"></tbody></table></div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="journey" aria-labelledby="journey-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">My journey</span>
+      <h2 id="journey-h">Six chapters, one thread: making data people can trust</h2>
+      <p>Each blue bar is a job, gray is study. Select a bar or a chapter to see what I did in everyday words.</p>
+    </div>
+    <div class="chart">
+      <div class="chart-head">
+        <h3>2019 to today</h3>
+        <div class="legend" aria-hidden="true"><span><i style="background:var(--accent)"></i>Work</span><span><i style="background:var(--study)"></i>Study</span><span><i style="background:repeating-linear-gradient(135deg,var(--accent) 0 3px,color-mix(in srgb,var(--accent) 70%,var(--surface)) 3px 5px)"></i>Projects now</span></div>
+      </div>
+      <div class="track" id="track"></div>
+      <div class="chapters" id="chapters"></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="explainer" aria-labelledby="exp2-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">New to data? Start here</span>
+      <h2 id="exp2-h">What a data pipeline does, in four steps</h2>
+      <p>A data pipeline is like a restaurant kitchen: raw ingredients come in, get washed and prepared, get checked, and leave as a finished dish. Press play or pick a step.</p>
+    </div>
+    <div class="chart">
+      <div class="steps" role="group" aria-label="Pipeline steps" id="steps">
+        <button class="step" type="button" data-s="0" aria-pressed="true"><span class="n">Step 1</span><span class="t">Collect</span></button>
+        <button class="step" type="button" data-s="1" aria-pressed="false"><span class="n">Step 2</span><span class="t">Clean</span></button>
+        <button class="step" type="button" data-s="2" aria-pressed="false"><span class="n">Step 3</span><span class="t">Check &amp; label</span></button>
+        <button class="step" type="button" data-s="3" aria-pressed="false"><span class="n">Step 4</span><span class="t">Share</span></button>
+      </div>
+      <div class="explain">
+        <div aria-live="polite">
+          <h4 id="ex-title"></h4>
+          <p class="plain" id="ex-text"></p>
+          <p class="kitchen" id="ex-kitchen"></p>
+          <button class="btn play" type="button" id="ex-play">▶ Play all steps</button>
+        </div>
+        <div class="demo" id="ex-demo"></div>
+      </div>
+      <p class="note">This is exactly what my DMVTek pipeline (below) does, only with far more rows and real map data.</p>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="work" aria-labelledby="work-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Featured work · DMVTek (Niyam IT) · 2025</span>
+      <h2 id="work-h">Turning raw map data into an industry-tagged business dataset</h2>
+      <p>A Prefect pipeline that pulls Overture Maps places data from AWS S3, cleans it, tags each business with a NAICS industry code, and loads it so dashboards can use it. Select a stage to see what it does and why I built it that way.</p>
+    </div>
+
+    <div class="case">
+      <div class="case-meta">
+        <span><b>Role</b> Junior Python Developer, 4-person team</span>
+        <span><b>Stack</b> Python · Prefect · DuckDB/DuckLake · Postgres · Docker/Podman · Superset · pytest</span>
+      </div>
+
+      <div class="flow" role="group" aria-label="Pipeline stages">
+        <button class="stage" data-i="0" aria-pressed="true"><span class="n">Source</span><span class="t">Overture Maps on S3</span><span class="s">parquet</span></button>
+        <span class="arrow" aria-hidden="true">→</span>
+        <button class="stage" data-i="1" aria-pressed="false"><span class="n">Extract</span><span class="t">Filter at the source</span><span class="s">duckdb httpfs</span></button>
+        <span class="arrow" aria-hidden="true">→</span>
+        <button class="stage" data-i="2" aria-pressed="false"><span class="n">Transform</span><span class="t">Flatten nested JSON</span><span class="s">pandas</span></button>
+        <span class="arrow" aria-hidden="true">→</span>
+        <button class="stage" data-i="3" aria-pressed="false"><span class="n">Enrich</span><span class="t">Category → NAICS</span><span class="s">json config</span></button>
+        <span class="arrow" aria-hidden="true">→</span>
+        <button class="stage" data-i="4" aria-pressed="false"><span class="n">Load</span><span class="t">Idempotent upsert</span><span class="s">MERGE · DuckLake</span></button>
+      </div>
+
+      <div class="detail" aria-live="polite">
+        <div>
+          <h3 id="d-title"></h3>
+          <p class="why" id="d-why"></p>
+        </div>
+        <pre id="d-code"></pre>
+      </div>
+
+      <div class="decisions">
+        <div><h4>Built to be rerun</h4><p>Loads use MERGE, so running the flow twice updates rows instead of duplicating them.</p></div>
+        <div><h4>Config over code</h4><p>The NAICS mapping lives in a JSON file, so analysts can extend it without touching Python.</p></div>
+        <div><h4>Tested</h4><p>pytest unit and integration tests with mocks cover the mapping, JSON parsing, upsert logic and the full flow.</p></div>
+        <div><h4>One-command deploys</h4><p>A deploy script sets up the Prefect work pool and ships every flow with <span class="mono">just deploy-flows</span>.</p></div>
+      </div>
+      <p class="note">The code belongs to my employer, so the repository is private. Snippets above are simplified. I'm happy to walk through the full design in an interview.</p>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="projects" aria-labelledby="proj-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Projects</span>
+      <h2 id="proj-h">More things I've built</h2>
+    </div>
+    <div class="projects">
+      <article class="proj building">
+        <div class="proj-top"><h3>Automated ELT Pipeline</h3><span class="badge">In progress · 2026</span></div>
+        <p>Public API data pulled with Python, loaded into PostgreSQL, modeled with dbt and served to a dashboard. Scheduled with Prefect, containerized with Docker and tested in CI.</p>
+        <div class="tags"><span class="tag">Python</span><span class="tag">SQL</span><span class="tag">dbt</span><span class="tag">Prefect</span><span class="tag">Docker</span><span class="tag">GitHub Actions</span></div>
+      </article>
+      <article class="proj">
+        <div class="proj-top"><h3>LLM Provider Comparison</h3><span class="yr">2026</span></div>
+        <p>A Python script that sends the same structured-output prompt to GPT-4o (OpenAI), Claude Haiku (Anthropic) and Llama 3.3 70B (Groq), parses each reply as JSON and compares parsing reliability and token usage side by side. API keys load from environment variables and are validated before any call.</p>
+        <div class="tags"><span class="tag">Python</span><span class="tag">OpenAI API</span><span class="tag">Anthropic API</span><span class="tag">Groq</span><span class="tag">JSON</span></div>
+        <a class="link" href="https://github.com/Rujula-Nadipi/ai-engineering" target="_blank" rel="noopener">View on GitHub →</a>
+      </article>
+      <article class="proj">
+        <div class="proj-top"><h3>COVID-19 Reporting Pipeline on Azure</h3><span class="yr">2023 · course project</span></div>
+        <p>Ingested European COVID-19 data from the ECDC into Azure Blob Storage and Data Lake Gen2, transformed it with Data Factory data flows, loaded it into Azure SQL Database, and built Power BI reports on cases, deaths, hospital and ICU occupancy and testing. Pipelines run on dependency triggers.</p>
+        <div class="tags"><span class="tag">Azure Data Factory</span><span class="tag">Data flows</span><span class="tag">ADLS Gen2</span><span class="tag">Azure SQL</span><span class="tag">Power BI</span></div>
+        <a class="link" href="https://github.com/Rujula-Nadipi/Covid-19-Reporting---Azure-Data-Factory" target="_blank" rel="noopener">View on GitHub →</a>
+      </article>
+      <article class="proj">
+        <div class="proj-top"><h3>Formula 1 Lakehouse on Azure Databricks</h3><span class="yr">2023 · course project</span></div>
+        <p>Pulled Formula 1 race history from the Ergast API into Azure Data Lake Gen2, transformed it with Spark and SQL on Databricks into Delta Lake tables with incremental loads, orchestrated the pipeline with Azure Data Factory and analyzed driver and constructor performance in Power BI.</p>
+        <div class="tags"><span class="tag">Databricks</span><span class="tag">PySpark</span><span class="tag">Spark SQL</span><span class="tag">Delta Lake</span><span class="tag">ADLS Gen2</span><span class="tag">Azure Data Factory</span><span class="tag">Power BI</span></div>
+        <a class="link" href="https://github.com/Rujula-Nadipi/Formula1-data-engineering-project" target="_blank" rel="noopener">View on GitHub →</a>
+      </article>
+      <article class="proj">
+        <div class="proj-top"><h3>COVID-19 Detection Model · Virufy</h3><span class="yr">2023</span></div>
+        <p>CU Boulder capstone. Built an ML pipeline on multi-modal COVID-19 data, fixed a 10:1 class imbalance with SMOTE, compared three algorithms with cross-validation and tuned XGBoost to 85% held-out accuracy.</p>
+        <div class="tags"><span class="tag">Python</span><span class="tag">scikit-learn</span><span class="tag">XGBoost</span><span class="tag">SMOTE</span></div>
+      </article>
+      <article class="proj">
+        <div class="proj-top"><h3>Economic Policy and the Pandemic</h3><span class="yr">2021</span></div>
+        <p>Research on how economic policies affected consumer spending and unemployment during the COVID-19 pandemic.</p>
+        <div class="tags"><span class="tag">Statistical analysis</span><span class="tag">LaTeX</span></div>
+        <a class="link" href="https://github.com/Rujula-Nadipi/IMPACT-OF-ECONOMIC-POLICIES-ON-CONSUMER-SPENDING-AND-UNEMPLOYMENT-DURING-COVID-19-PANDEMIC" target="_blank" rel="noopener">View on GitHub →</a>
+      </article>
+      <article class="proj">
+        <div class="proj-top"><h3>Hospitals Data Flow · DMVTek</h3><span class="yr">2025</span></div>
+        <p>A Prefect flow that loads hospital Parquet data into GizmoSQL (DuckDB over Arrow Flight SQL) so it can be explored in Apache Superset dashboards.</p>
+        <div class="tags"><span class="tag">Prefect</span><span class="tag">DuckDB</span><span class="tag">Arrow Flight SQL</span><span class="tag">Superset</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="experience" aria-labelledby="exp-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Experience</span>
+      <h2 id="exp-h">Where I've worked</h2>
+    </div>
+    <ol class="timeline">
+      <li>
+        <span class="when">2025</span>
+        <div>
+          <h3>Junior Python Developer</h3>
+          <div class="org">DMVTek (Niyam IT) · Virginia</div>
+          <ul>
+            <li>Built Prefect ETL flows with DuckDB/DuckLake and PostgreSQL, including the Overture POI pipeline above that ingests places data from AWS S3 and tags businesses with NAICS industry codes</li>
+            <li>Made loads idempotent with MERGE-based upserts and CREATE IF NOT EXISTS patterns, so flows can be rerun safely after failures</li>
+            <li>Built a hospitals data flow loading Parquet into GizmoSQL (DuckDB over Arrow Flight SQL) to power Apache Superset dashboards</li>
+            <li>Automated Prefect deployments with a script that creates the work pool and deploys every flow in one command, so the team could run flows from the Prefect UI</li>
+            <li>Containerized Postgres, a Prefect worker and Metabase with Docker Compose/Podman, and fixed Windows-specific worker issues with file access and path handling</li>
+            <li>Wrote pytest unit and integration tests with mocks covering data parsing, NAICS mapping, upsert logic and end-to-end flow runs</li>
+            <li>Worked in a 4-person team using feature branches, pull requests and code review in Git</li>
+          </ul>
+        </div>
+      </li>
+      <li>
+        <span class="when">2024 – 2025</span>
+        <div>
+          <h3>Business Analyst</h3>
+          <div class="org">Global Alliant Inc. · Virginia</div>
+          <ul>
+            <li>Designed and maintained Power BI governance dashboards tracking project health, compliance status and sprint deliverables across multiple teams</li>
+            <li>Ran ad hoc analysis on governance datasets and turned raw program data into executive-ready KPI reports</li>
+            <li>Mapped governance workflows as BPMN process diagrams, helping leadership spot and remove bottlenecks</li>
+            <li>Spotted a recurring reporting delay that frustrated the client and brought developers and stakeholders together to fix it</li>
+            <li>Built a governance knowledge base of agendas, decisions and metric definitions that became the team's go-to reference</li>
+          </ul>
+        </div>
+      </li>
+      <li>
+        <span class="when">2023 – 2024</span>
+        <div>
+          <h3>Data Analyst</h3>
+          <div class="org">AI Consultants Inc. · Virginia</div>
+          <ul>
+            <li>Validated 50+ large datasets across Azure Data Lake and Azure SQL so downstream analytics and ML pipelines received complete, correct data</li>
+            <li>Built and maintained Power BI dashboards tracking pipeline health and delivery SLAs, giving engineering leads real-time visibility into data issues</li>
+            <li>Resolved 30+ privacy and governance tickets, including PII masking and stale data removal, with no policy violations</li>
+            <li>Reviewed and tested SQL transformation changes before production deployment to catch data-quality problems early</li>
+            <li>Documented table definitions, update logic and field-level metadata for 100+ data assets, creating a single source of truth for engineers</li>
+            <li>Identified and deprecated 20+ unused tables and led the cross-team migration of dependent assets, lowering storage costs and maintenance work</li>
+          </ul>
+        </div>
+      </li>
+      <li>
+        <span class="when">2023</span>
+        <div>
+          <h3>Data Analyst, Machine Learning</h3>
+          <div class="org">Virufy · CU Boulder capstone</div>
+          <ul>
+            <li>Built an ML pipeline on multi-modal COVID-19 data covering ingestion, feature engineering, model training and evaluation</li>
+            <li>Fixed a roughly 10:1 class imbalance with SMOTE, improving recall on positive cases so the model was reliable for real-world use</li>
+            <li>Benchmarked three algorithms with cross-validation and tuned XGBoost to 85% held-out test accuracy</li>
+          </ul>
+        </div>
+      </li>
+      <li>
+        <span class="when">2019 – 2021</span>
+        <div>
+          <h3>Systems Engineer</h3>
+          <div class="org">Tata Consultancy Services · India</div>
+          <ul>
+            <li>Provided production support for a UK insurance client's policy and claims data systems built on Adabas and Natural</li>
+            <li>Performed root-cause analysis on production incidents and helped put checks in place to stop repeat issues</li>
+            <li>Worked with stakeholders across several countries to understand requirements and turn them into technical specifications</li>
+            <li>Kept SLA-bound business reporting on schedule for the client</li>
+          </ul>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="block" aria-labelledby="skills-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Toolbox</span>
+      <h2 id="skills-h">Skills and education</h2>
+    </div>
+    <div class="chart">
+      <div class="chart-head">
+        <div>
+          <h3>Skills map: where I used each tool</h3>
+          <p>A dot means I used that skill in that job or project. The bar on the right shows how many places I've used it.</p>
+        </div>
+      </div>
+      <div class="smap-wrap"><table class="smap" id="smap"></table></div>
+      <div class="skills" style="margin-top:26px">
+        <div><h3>Learning now</h3><div class="tags"><span class="tag">dbt</span><span class="tag">Databricks (deeper)</span><span class="tag">PySpark (deeper)</span><span class="tag">GitHub Actions</span></div></div>
+        <div><h3>Also comfortable with</h3><div class="tags"><span class="tag">pandas</span><span class="tag">Git</span><span class="tag">Parquet</span><span class="tag">Delta Lake</span><span class="tag">Podman</span></div></div>
+        <div><h3>Ways of working</h3><div class="tags"><span class="tag">Agile / Scrum</span><span class="tag">Jira</span><span class="tag">documentation</span></div></div>
+      </div>
+    </div>
+    <div class="edu">
+      <div><b>M.S. Data Science</b><span>University of Colorado Boulder · 2023</span></div>
+      <div><b>M.S. Management &amp; Data Analytics</b><span>University of North America · in progress</span></div>
+      <div><b>B.Tech Computer Science</b><span>Jawaharlal Nehru Technological University · 2019</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="contact" aria-labelledby="contact-h">
+  <div class="wrap contact">
+    <div>
+      <span class="eyebrow">Contact</span>
+      <h2 id="contact-h">Looking for a team that cares about reliable data.</h2>
+      <p>I'm open to data engineering, analytics engineering and data analyst roles across the US. I'd love to talk about how I can help your team.</p>
+    </div>
+    <div class="cbox">
+      <div class="crow">
+        <div><div class="lbl">Email</div><div class="val" id="email">rujulanadipi@gmail.com</div></div>
+        <button class="btn copy" id="copy" type="button">Copy</button>
+      </div>
+      <div class="crow">
+        <div><div class="lbl">GitHub</div><a class="val" href="https://github.com/Rujula-Nadipi" target="_blank" rel="noopener">github.com/Rujula-Nadipi</a></div>
+      </div>
+      <div class="crow">
+        <div><div class="lbl">LinkedIn</div><a class="val" href="https://www.linkedin.com/in/rujula-reddy-nadipi/" target="_blank" rel="noopener">linkedin.com/in/rujula-reddy-nadipi</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer><div class="wrap">© 2026 Rujula Nadipi · Data Engineer</div></footer>
+
+<script>
+(function(){
+  var stages=[
+    {t:"Source: Overture Maps places data",
+     w:"Overture publishes global points-of-interest data as Parquet files on a public AWS S3 bucket. It's large, nested and updated in releases, which makes it a <b>realistic data engineering source</b>.",
+     c:"s3://overturemaps-us-west-2/release/\n  2025-09-24.0/theme=places/*/*\n\n-- columns include nested JSON:\n-- names, categories, addresses,\n-- websites, phones, confidence, geometry"},
+    {t:"Extract: filter where the data lives",
+     w:"DuckDB reads Parquet straight from S3 and applies the filter there, so <b>only the region I need is downloaded</b>, not the whole planet. Low-confidence records are dropped at the same step.",
+     c:"INSTALL httpfs; LOAD httpfs;\n\nCOPY (\n  SELECT id, names, categories,\n         addresses, confidence, geometry\n  FROM read_parquet('s3://.../places/*/*')\n  WHERE addresses[1].country = 'US'\n    AND confidence > 0.5\n) TO 'overture_poi_us.parquet';"},
+    {t:"Transform: flatten nested JSON",
+     w:"Each record stores names, categories and addresses as nested JSON. I flatten them into <b>plain, typed columns</b> (name, category, city, state, postal code, website) that analysts can query directly.",
+     c:"df['primary_name'] = df['names'].apply(\n    lambda x: x.get('primary', ''))\ndf['city'] = df['addresses'].apply(\n    lambda a: a[0].get('locality', '')\n    if a else '')"},
+    {t:"Enrich: tag each business with a NAICS code",
+     w:"NAICS is the US standard for classifying industries. A <b>JSON mapping file</b> turns Overture categories into NAICS codes, so the dataset can be sliced by industry and new categories can be added without code changes.",
+     c:"// data/naics_category_mapping.json\n{\n  \"food_and_beverage\": {\n    \"restaurant\": \"722511\",\n    \"cafe\": \"722515\"\n  },\n  \"healthcare\": {\n    \"hospital\": \"622110\"\n  }\n}"},
+    {t:"Load: idempotent upsert into DuckLake",
+     w:"Pipelines get rerun after failures, backfills and fixes. Using <b>MERGE on the record id</b> means a rerun updates existing rows instead of creating duplicates, so the table stays correct no matter how many times the flow runs.",
+     c:"MERGE INTO naics_business_poi AS t\nUSING staged AS s\n  ON t.id = s.id\nWHEN MATCHED THEN UPDATE SET *\nWHEN NOT MATCHED THEN INSERT *;"}
+  ];
+  var btns=document.querySelectorAll('.stage');
+  var tEl=document.getElementById('d-title'),wEl=document.getElementById('d-why'),cEl=document.getElementById('d-code');
+  function show(i){
+    btns.forEach(function(b){b.setAttribute('aria-pressed',String(+b.dataset.i===i));});
+    tEl.textContent=stages[i].t; wEl.innerHTML=stages[i].w; cEl.textContent=stages[i].c;
+  }
+  btns.forEach(function(b){b.addEventListener('click',function(){show(+b.dataset.i);});});
+  show(0);
+
+  var copy=document.getElementById('copy'),email=document.getElementById('email');
+  copy.addEventListener('click',function(){
+    var done=function(){copy.textContent='Copied';setTimeout(function(){copy.textContent='Copy';},1600);};
+    var fallback=function(){var r=document.createRange();r.selectNodeContents(email);var s=getSelection();s.removeAllRanges();s.addRange(r);copy.textContent='Selected';};
+    try{navigator.clipboard.writeText(email.textContent).then(done,fallback);}catch(e){fallback();}
+  });
+
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- shared tooltip ---------- */
+  var tip=document.createElement('div');tip.className='tip';tip.hidden=true;tip.setAttribute('role','tooltip');document.body.appendChild(tip);
+  function place(x,y){var w=tip.offsetWidth,h=tip.offsetHeight;var L=Math.min(Math.max(8,x+14),innerWidth-w-8);var T=y+16+h>innerHeight?y-h-12:y+16;tip.style.left=L+'px';tip.style.top=Math.max(8,T)+'px';}
+  function showTip(el,x,y){tip.innerHTML=el.getAttribute('data-tip');tip.hidden=false;place(x,y);}
+  document.addEventListener('pointermove',function(e){var el=e.target.closest&&e.target.closest('[data-tip]');if(el){showTip(el,e.clientX,e.clientY);}else{tip.hidden=true;}});
+  document.addEventListener('focusin',function(e){var el=e.target.closest&&e.target.closest('[data-tip]');if(el){var r=el.getBoundingClientRect();showTip(el,r.left+r.width/2,r.bottom);}else{tip.hidden=true;}});
+  document.addEventListener('focusout',function(){tip.hidden=true;});
+  addEventListener('scroll',function(){tip.hidden=true;},{passive:true});
+
+  /* ---------- impact: before / after ---------- */
+  var impact=[
+    {co:'DMVTek',what:'Time spent setting up pipelines by hand',cut:60,plain:'I packaged the data tools with Docker, so new data jobs start ready to go instead of being wired up by hand.'},
+    {co:'Global Alliant',what:'Time leaders spent preparing reports',cut:50,plain:'Power BI dashboards replaced manual report building, so leaders opened a page instead of waiting for a slide deck.'},
+    {co:'AI Consultants',what:'Time to notice a broken data feed',cut:45,plain:'My dashboards warned engineers as soon as a data feed failed, instead of someone noticing days later.'},
+    {co:'DMVTek',what:'Copy-pasted (duplicate) code',cut:40,plain:'I turned repeated code into shared building blocks, so new pipeline features take hours instead of days.'},
+    {co:'Global Alliant',what:'Repeat "what does this mean?" questions',cut:40,plain:'I built a knowledge base of definitions and decisions that became the team’s go-to reference.'},
+    {co:'TCS',what:'Production problems that kept coming back',cut:40,plain:'After finding the root cause of each incident, I added checks so the same problem would not happen again.'},
+    {co:'AI Consultants',what:'Data-quality incidents',cut:35,plain:'I tested every SQL change before it went live, catching mistakes before they reached reports.'},
+    {co:'Global Alliant',what:'Time for a governance process to finish',cut:30,plain:'I drew simple process maps (BPMN) that showed leaders where work got stuck; three bottlenecks were removed.'},
+    {co:'AI Consultants',what:'Time for new engineers to get up to speed',cut:25,plain:'I documented 100+ data tables in plain language, so newcomers didn’t have to guess what each column meant.'},
+    {co:'DMVTek',what:'Time to deliver sprint work',cut:20,plain:'I cleared blockers early and shipped ahead of schedule with zero rollbacks.'},
+    {co:'AI Consultants',what:'Data storage costs',cut:15,plain:'I found 20+ tables nobody used anymore and safely retired them.'}
+  ];
+  var full={'DMVTek':'DMVTek (Niyam IT) · 2025','Global Alliant':'Global Alliant Inc. · 2024–2025','AI Consultants':'AI Consultants Inc. · 2023–2024','TCS':'Tata Consultancy Services · 2019–2021'};
+  var baList=document.getElementById('ba');
+  function drawBA(f){
+    var rows=impact.filter(function(d){return f==='all'||d.co===f;});
+    baList.innerHTML=rows.map(function(d,i){
+      var after=100-d.cut;
+      var t='<b>'+esc(d.what)+'</b><br>Before: 100 · After: '+after+' (<b>'+d.cut+'% less</b>)<br><br>'+esc(d.plain);
+      return '<li><div class="what">'+esc(d.what)+'<span class="co">'+esc(full[d.co])+'</span></div>'+
+        '<div class="bars" tabindex="0" data-tip="'+esc(t)+'" aria-label="'+esc(d.what)+': '+d.cut+' percent less after my work">'+
+        '<div class="row"><span class="bar b" style="width:calc((100% - 92px) * 1)"></span><span class="val">'+(i===0?'Before':'')+'</span></div>'+
+        '<div class="row"><span class="bar a" data-w="'+after+'" style="width:'+(reduce?'calc((100% - 92px) * '+after/100+')':'calc((100% - 92px) * 1)')+'"></span><span class="val"><b>'+d.cut+'% less</b></span></div>'+
+        '</div></li>';
+    }).join('');
+    if(!reduce){requestAnimationFrame(function(){requestAnimationFrame(function(){
+      baList.querySelectorAll('.bar.a').forEach(function(b){b.style.width='calc((100% - 92px) * '+(+b.dataset.w/100)+')';});
+    });});}
+  }
+  document.getElementById('ba-table').innerHTML=impact.map(function(d){return '<tr><td>'+esc(d.what)+'</td><td>'+esc(d.co)+'</td><td class="n">'+d.cut+'% less</td><td>'+esc(d.plain)+'</td></tr>';}).join('');
+  var chips=document.querySelectorAll('#ba-filters .chip');
+  chips.forEach(function(c){c.addEventListener('click',function(){chips.forEach(function(x){x.setAttribute('aria-pressed',String(x===c));});drawBA(c.dataset.f);});});
+  drawBA('all');
+
+  /* ---------- journey ---------- */
+  var T0=2019.5,T1=2026.75;
+  function x(y,m){return ((y+(m-1)/12)-T0)/(T1-T0)*100;}
+  var chapters=[
+    {n:1,lane:'work',s:[2019,7],e:[2021,8],yrs:'2019 – 2021 · India',co:'Tata Consultancy Services',h:'Kept a big insurer’s data running',p:'My first job. I looked after policy and claims data for a large insurance client, found out why things broke, and added checks so the same problems didn’t come back.',win:'40% fewer repeat problems · 98%+ reports on time'},
+    {n:2,lane:'work',s:[2023,1],e:[2023,5],yrs:'2023 · Colorado',co:'Virufy (CU Boulder capstone)',h:'Taught a computer to spot COVID-19',p:'During my master’s I built a model that learns from health data to flag likely COVID-19 cases. Positive cases were rare (about 1 in 10), so I rebalanced the data so the model wouldn’t simply ignore them.',win:'85% accurate · 30% better at catching positive cases'},
+    {n:3,lane:'work',s:[2023,8],e:[2024,9],yrs:'2023 – 2024 · Virginia',co:'AI Consultants Inc.',h:'Made sure the data could be trusted',p:'I checked large datasets in Microsoft Azure before anyone used them, built dashboards that warned engineers when a feed broke, protected personal information and retired tables nobody used.',win:'45% faster at spotting problems · 15% lower storage costs'},
+    {n:4,lane:'work',s:[2024,10],e:[2025,3],yrs:'2024 – 2025 · Virginia',co:'Global Alliant Inc.',h:'Turned project data into answers for leaders',p:'I built Power BI dashboards and drew simple process maps so leaders could see how projects were doing and where work got stuck.',win:'Reports went from weekly to same day'},
+    {n:5,lane:'work',s:[2025,8],e:[2025,10],yrs:'2025 · Virginia',co:'DMVTek (Niyam IT)',h:'Built data pipelines end to end',p:'I wrote Python pipelines that pull map data from the cloud, clean it, tag each business with its industry, and load it for dashboards, all tested and packaged with Docker.',win:'60% less manual setup · 90%+ of code covered by tests'},
+    {n:6,lane:'now',s:[2026,1],e:[2026,10],yrs:'2026 · today',co:'Personal projects + M.S. in progress',h:'Learning in public',p:'I’m building an automated pipeline with dbt and Prefect, comparing AI models from three providers, and finishing a second master’s in Management & Data Analytics.',win:'New skills: dbt, CI/CD, AI APIs'}
+  ];
+  var study=[{s:[2021,8],e:[2023,5],t:'M.S. Data Science · CU Boulder'},{s:[2024,9],e:[2026,10],t:'M.S. Management & Data Analytics · in progress'}];
+  var grid='';for(var yr=2020;yr<=2026;yr++){grid+='<span class="gl" style="left:'+x(yr,1)+'%"></span>';}
+  function seg(c){var l=x(c.s[0],c.s[1]),w=x(c.e[0],c.e[1])-l;return '<button type="button" class="seg'+(c.lane==='now'?' now':'')+'" data-c="'+c.n+'" aria-pressed="false" style="left:'+l+'%;width:'+w+'%" data-tip="'+esc('<b>'+c.n+'. '+c.h+'</b><br>'+c.co+' · '+c.yrs)+'" aria-label="Chapter '+c.n+': '+esc(c.co)+'">'+c.n+'</button>';}
+  var track=document.getElementById('track');
+  track.innerHTML=
+    '<div class="lane"><span>Work</span><div class="rail">'+grid+chapters.map(seg).join('')+
+      '<span class="marker" style="left:'+x(2021,8)+'%"><b>Moved to the US</b></span></div></div>'+
+    '<div class="lane"><span>Study</span><div class="rail">'+grid+study.map(function(s){var l=x(s.s[0],s.s[1]),w=x(s.e[0],s.e[1])-l;return '<span class="seg study" tabindex="0" style="left:'+l+'%;width:'+w+'%" data-tip="'+esc('<b>'+s.t+'</b>')+'" aria-label="'+esc(s.t)+'"></span>';}).join('')+'</div></div>'+
+    '<div class="axis"><span></span><div class="ticks">'+[2020,2021,2022,2023,2024,2025,2026].map(function(y){return '<span style="left:'+x(y,1)+'%">'+(y===2020||y===2026||innerWidth>620||y%2===0?y:'')+'</span>';}).join('')+'</div></div>';
+  var chapEl=document.getElementById('chapters');
+  chapEl.innerHTML=chapters.map(function(c){return '<button type="button" class="chap" data-c="'+c.n+'" aria-pressed="false"><span class="num">Chapter '+c.n+' · '+esc(c.yrs)+'</span><h4>'+esc(c.h)+'</h4><span class="num">'+esc(c.co)+'</span><p>'+esc(c.p)+'</p><span class="win">'+esc(c.win)+'</span></button>';}).join('');
+  function pick(n){document.querySelectorAll('.seg[data-c],.chap').forEach(function(el){el.setAttribute('aria-pressed',String(+el.dataset.c===n));});}
+  document.querySelectorAll('.seg[data-c]').forEach(function(b){b.addEventListener('click',function(){var n=+b.dataset.c;pick(n);var card=chapEl.querySelector('.chap[data-c="'+n+'"]');if(card&&card.scrollIntoView){card.scrollIntoView({block:'nearest',behavior:reduce?'auto':'smooth'});}});});
+  chapEl.querySelectorAll('.chap').forEach(function(b){b.addEventListener('click',function(){pick(+b.dataset.c);});});
+  pick(5);
+
+  /* ---------- pipeline explainer ---------- */
+  var raw=[
+    ['Blue Bottle Café','new york','cafe'],
+    ['Blue Bottle Café','New York','cafe'],
+    ['Sunrise Clinic','N.Y.C.','clinic'],
+    ["Joe's Pizza",'Boston',''],
+    ['Harbor Hospital','boston','hospital'],
+    ['Corner Bakery','Boston','bakery']
+  ];
+  var cleanCity=['New York','New York','New York','Boston','Boston','Boston'];
+  var cleanType=['cafe','cafe','clinic','restaurant','hospital','bakery'];
+  var industry=['Food service','Food service','Healthcare','Food service','Healthcare','Food service'];
+  var badCity=[1,0,1,0,1,0];
+  var stepsTxt=[
+    {t:'Collect: raw data arrives messy',x:'Data comes in from many places, and it’s rarely tidy. Here are three common problems: the <b>same shop listed twice</b>, <b>one city spelled three different ways</b>, and a <b>missing value</b>.',k:'<b>In the kitchen:</b> groceries arrive. Some are bruised, some were delivered twice.'},
+    {t:'Clean: fix it so it’s consistent',x:'I <b>standardize spellings</b> so "new york" and "N.Y.C." both become New York, <b>remove the duplicate</b>, and <b>fill the gap</b> using other information about the business.',k:'<b>In the kitchen:</b> wash, peel and chop, and throw out the extra copy.'},
+    {t:'Check & label: catch mistakes early',x:'Each business gets an <b>industry label</b>, so we can compare food service with healthcare. Then <b>automatic tests</b> run every time, so a mistake is caught before anyone sees it.',k:'<b>In the kitchen:</b> the chef tastes the dish before it leaves the pass.'},
+    {t:'Share: an answer anyone can read',x:'Clean, labeled data turns into a <b>simple chart</b> in a dashboard. A manager can now answer "what kinds of businesses are in each city?" in seconds.',k:'<b>In the kitchen:</b> the plate goes out to the table.'}
+  ];
+  var demo=document.getElementById('ex-demo'),exT=document.getElementById('ex-title'),exX=document.getElementById('ex-text'),exK=document.getElementById('ex-kitchen');
+  function table(s){
+    var head='<tr><th>Business</th><th>City</th><th>Type</th>'+(s>=2?'<th>Industry</th>':'')+'</tr>';
+    var body=raw.map(function(r,i){
+      var dup=i===1,cls=dup&&s>=1?' class="gone"':'';
+      var city=s===0?esc(r[1])+(badCity[i]?'<span class="flag">spelling</span>':''):esc(cleanCity[i]);
+      var cityC=s===0&&badCity[i]?' class="bad"':(s===1&&badCity[i]?' class="fixed"':'');
+      var type=s===0?(r[2]?esc(r[2]):'<span class="flag">missing</span>'):esc(cleanType[i]);
+      var typeC=i===3?(s===0?' class="bad"':(s===1?' class="fixed"':'')):'';
+      var nameC=dup&&s===0?' class="bad"':'';
+      var name=esc(r[0])+(dup&&s===0?'<span class="flag">duplicate</span>':'');
+      return '<tr'+cls+'><td'+nameC+'>'+name+'</td><td'+cityC+'>'+city+'</td><td'+typeC+'>'+type+'</td>'+(s>=2?'<td'+(s===2?' class="fixed"':'')+'>'+industry[i]+'</td>':'')+'</tr>';
+    }).join('');
+    return '<table>'+head+body+'</table>';
+  }
+  function chart(){
+    var rows=[['Food service',3],['Healthcare',2]],max=3;
+    return '<div class="mini" role="img" aria-label="Bar chart: 3 food service businesses and 2 healthcare businesses"><p class="plain" style="margin:0 0 4px"><b>Businesses by industry</b> (after cleaning: 5, not 6)</p>'+
+      rows.map(function(r){return '<div class="r"><span>'+r[0]+'</span><div><div class="bar" data-w="'+(r[1]/max*100)+'" style="width:'+(reduce?r[1]/max*100:8)+'%">'+r[1]+'</div></div></div>';}).join('')+
+      '<p class="plain" style="margin-top:6px"><b>Boston:</b> 3 businesses · <b>New York:</b> 2 businesses</p></div>';
+  }
+  var stepBtns=document.querySelectorAll('.step'),cur=0,timer=null;
+  function setStep(s){
+    cur=s;stepBtns.forEach(function(b){b.setAttribute('aria-pressed',String(+b.dataset.s===s));});
+    exT.textContent=stepsTxt[s].t;exX.innerHTML=stepsTxt[s].x;exK.innerHTML=stepsTxt[s].k;
+    demo.innerHTML=s<3?table(s)+(s===2?'<ul class="checks"><li>No duplicate businesses</li><li>Every row has a city spelled one way</li><li>Every business has an industry</li></ul>':''):chart();
+    if(s===3&&!reduce){requestAnimationFrame(function(){requestAnimationFrame(function(){demo.querySelectorAll('.mini .bar').forEach(function(b){b.style.width=b.dataset.w+'%';});});});}
+  }
+  var playBtn=document.getElementById('ex-play');
+  function stop(){clearInterval(timer);timer=null;playBtn.textContent='▶ Play all steps';}
+  stepBtns.forEach(function(b){b.addEventListener('click',function(){stop();setStep(+b.dataset.s);});});
+  playBtn.addEventListener('click',function(){
+    if(timer){stop();return;}
+    setStep(0);playBtn.textContent='❚❚ Pause';
+    timer=setInterval(function(){if(cur>=3){stop();return;}setStep(cur+1);},3800);
+  });
+  setStep(0);
+
+  /* ---------- skills map ---------- */
+  var cols=['TCS','Virufy','AI Consultants','Global Alliant','DMVTek','Projects'];
+  var skills=[
+    ['SQL','asking databases questions',[1,0,1,0,1,1]],
+    ['Python','programming',[0,1,0,0,1,1]],
+    ['Power BI','dashboards',[0,0,1,1,0,1]],
+    ['Microsoft Azure','cloud storage & databases',[0,0,1,0,0,1]],
+    ['Prefect','scheduling data jobs',[0,0,0,0,1,1]],
+    ['DuckDB & PostgreSQL','databases',[0,0,0,0,1,1]],
+    ['Docker','packaging apps to run anywhere',[0,0,0,0,1,1]],
+    ['Data privacy & governance','protecting personal data',[0,0,1,1,0,0]],
+    ['Working with stakeholders','turning needs into specs',[1,0,0,1,0,0]],
+    ['pytest','automatic tests',[0,0,0,0,1,0]],
+    ['Metabase & Superset','dashboards',[0,0,0,0,1,0]],
+    ['Machine learning','scikit-learn, XGBoost',[0,1,0,0,0,0]],
+    ['Databricks & Spark','processing big data',[0,0,0,0,0,1]],
+    ['Process mapping (BPMN)','drawing how work flows',[0,0,0,1,0,0]]
+  ];
+  document.getElementById('smap').innerHTML='<thead><tr><th scope="col" style="text-align:left">Skill</th>'+cols.map(function(c){return '<th scope="col">'+c+'</th>';}).join('')+'<th scope="col" style="text-align:left">Used in</th></tr></thead><tbody>'+
+    skills.map(function(s){var n=s[2].reduce(function(a,b){return a+b;},0);
+      return '<tr><th scope="row">'+esc(s[0])+'<small>'+esc(s[1])+'</small></th>'+s[2].map(function(v,i){return v?'<td><span class="dot" tabindex="0" data-tip="'+esc('<b>'+s[0]+'</b> at '+cols[i])+'" aria-label="'+esc(s[0]+' used at '+cols[i])+'"></span></td>':'<td class="empty"><span class="sr" hidden>not used</span></td>';}).join('')+
+      '<td class="cnt"><span class="cntbar" style="width:'+(n*12)+'px"></span>'+n+'</td></tr>';}).join('')+'</tbody>';
+})();
+</script>
+
+</body>
+</html>
